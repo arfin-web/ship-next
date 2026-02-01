@@ -1,9 +1,14 @@
+import { auth } from "@/lib/auth";
+import { headers } from "next/headers";
 import Link from "next/link";
 import { Ship, Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Container } from "./Container";
 
-export function Navbar() {
+export async function Navbar() {
+    const session = await auth.api.getSession({
+        headers: await headers()
+    })
     return (
         <nav className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-md border-b border-border/50">
             <Container>
@@ -24,14 +29,20 @@ export function Navbar() {
                         <Link href="#features" className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors">Features</Link>
                         <Link href="#how-it-works" className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors">How it works</Link>
                         <Link href="#pricing" className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors">Pricing</Link>
-                        <div className="flex items-center gap-4 border-l border-border pl-8">
-                            <Button variant="ghost" size="sm" asChild>
-                                <Link href="/login">Log in</Link>
+                        {session?.user ? (
+                            <Button size="sm" className="shadow-lg shadow-primary/20" asChild>
+                                <Link href="/dashboard">Dashboard</Link>
                             </Button>
-                            <Button size="sm" className="bg-primary text-primary-foreground hover:bg-primary/90 shadow-lg shadow-primary/20" asChild>
-                                <Link href="/signup">Get Started</Link>
-                            </Button>
-                        </div>
+                        ) : (
+                            <div className="flex items-center gap-4 border-l border-border pl-8">
+                                <Button variant="ghost" size="sm" asChild>
+                                    <Link href="/login">Log in</Link>
+                                </Button>
+                                <Button size="sm" className="bg-primary text-primary-foreground hover:bg-primary/90 shadow-lg shadow-primary/20" asChild>
+                                    <Link href="/signup">Get Started</Link>
+                                </Button>
+                            </div>
+                        )}
                     </div>
 
                     {/* Mobile Menu Button - Label for Checkbox */}
