@@ -4,6 +4,7 @@ import { PublicBoardHeader } from "@/components/board/PublicBoardHeader";
 import { PublicFeatureList } from "@/components/board/PublicFeatureList";
 import { Container } from "@/components/landing-page/Container";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Footer } from "@/components/landing-page/Footer";
 
 export default async function PublicBoardPage({
     params,
@@ -78,19 +79,7 @@ export default async function PublicBoardPage({
                 </Container>
             </main>
 
-            <footer className="py-12 border-t border-border mt-20 text-center">
-                <Container>
-                    <p className="text-xs font-bold text-muted-foreground uppercase tracking-widest mb-2">Powered by</p>
-                    <div className="flex items-center justify-center gap-2 font-black text-lg tracking-tighter">
-                        <div className="bg-primary/10 p-1 rounded-md">
-                            <Ship className="w-4 h-4 text-primary" />
-                        </div>
-                        ShipNext
-                    </div>
-                </Container>
-            </footer>
+            <Footer />
         </div>
     );
 }
-
-import { Ship } from "lucide-react";

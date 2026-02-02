@@ -84,10 +84,10 @@ export async function voteForFeature(featureId: string, voterEmail: string) {
 
     const feature = await prisma.featureRequest.findUnique({
         where: { id: featureId },
-        select: { productId: true },
+        select: { product: { select: { slug: true } } },
     });
 
     if (feature) {
-        revalidatePath(`/board/${feature.productId}`);
+        revalidatePath(`/board/${feature.product.slug}`);
     }
 }

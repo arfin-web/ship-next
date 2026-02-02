@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { ThumbsUp, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { voteForFeature } from "@/app/actions/featureActions";
+import { cn } from "@/lib/utils";
 import {
     Dialog,
     DialogContent,
@@ -14,6 +15,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { toast } from "sonner"
 
 interface VoteButtonProps {
     featureId: string;
@@ -27,21 +29,31 @@ export function VoteButton({ featureId, initialVoteCount }: VoteButtonProps) {
     const [email, setEmail] = useState("");
     const [userVoted, setUserVoted] = useState(false);
 
-    // Load email from localStorage on mount
+    // Sync votes with initialVoteCount when it changes from server revalidation
+    useEffect(() => {
+        setVotes(initialVoteCount);
+    }, [initialVoteCount]);
+
+    // Load email and specific feature vote status from localStorage on mount
     useEffect(() => {
         const savedEmail = localStorage.getItem("shipnext_voter_email");
         if (savedEmail) {
             setEmail(savedEmail);
-            // We don't know for sure if they voted on THIS specific feature,
-            // but we have their email. The server action handles toggling.
         }
-    }, []);
+
+        const votedFeatures = JSON.parse(localStorage.getItem("shipnext_voted_features") || "[]");
+        if (votedFeatures.includes(featureId)) {
+            setUserVoted(true);
+        }
+    }, [featureId]);
 
     async function handleVoteClick() {
         const savedEmail = localStorage.getItem("shipnext_voter_email");
         if (!savedEmail) {
             setShowEmailDialog(true);
             return;
+        } else {
+            toast("You have already voted for this feature");
         }
 
         submitVote(savedEmail);
@@ -49,13 +61,33 @@ export function VoteButton({ featureId, initialVoteCount }: VoteButtonProps) {
 
     async function submitVote(voterEmail: string) {
         setIsVoting(true);
+
+        // Optimistic update
+        const isRemovingVote = userVoted;
+        setVotes(prev => isRemovingVote ? prev - 1 : prev + 1);
+        setUserVoted(!isRemovingVote);
+
         try {
             await voteForFeature(featureId, voterEmail);
+
+            // Save email
             localStorage.setItem("shipnext_voter_email", voterEmail);
-            // Optimistic update is tricky for toggle, but server revalidates.
-            // For now, let the page revalidate.
+
+            // Update voted features list in localStorage
+            const votedFeatures = JSON.parse(localStorage.getItem("shipnext_voted_features") || "[]");
+            let newVotedFeatures;
+            if (isRemovingVote) {
+                newVotedFeatures = votedFeatures.filter((id: string) => id !== featureId);
+            } else {
+                newVotedFeatures = [...votedFeatures, featureId];
+            }
+            localStorage.setItem("shipnext_voted_features", JSON.stringify(newVotedFeatures));
+
         } catch (error) {
             console.error("Voting failed", error);
+            // Revert optimistic update on failure
+            setVotes(prev => isRemovingVote ? prev + 1 : prev - 1);
+            setUserVoted(isRemovingVote);
         } finally {
             setIsVoting(false);
             setShowEmailDialog(false);
@@ -66,16 +98,25 @@ export function VoteButton({ featureId, initialVoteCount }: VoteButtonProps) {
         <>
             <Button
                 variant="outline"
-                className="flex flex-col items-center gap-1 h-auto py-2 px-3 min-w-[50px] border-border hover:border-primary hover:bg-primary/5 transition-all active:scale-95 group"
+                className={cn(
+                    "flex flex-col items-center gap-1 h-auto py-2 px-3 min-w-[50px] border-border transition-all active:scale-95 group",
+                    userVoted ? "bg-primary/10 border-primary shadow-sm" : "hover:border-primary hover:bg-primary/5"
+                )}
                 onClick={handleVoteClick}
                 disabled={isVoting}
             >
                 {isVoting ? (
                     <Loader2 className="w-4 h-4 animate-spin text-primary" />
                 ) : (
-                    <ThumbsUp className="w-4 h-4 group-hover:text-primary transition-colors" />
+                    <ThumbsUp className={cn(
+                        "w-4 h-4 transition-colors",
+                        userVoted ? "text-primary fill-primary/20" : "group-hover:text-primary"
+                    )} />
                 )}
-                <span className="text-xs font-black tracking-tighter">{votes}</span>
+                <span className={cn(
+                    "text-xs font-black tracking-tighter",
+                    userVoted ? "text-primary" : "text-foreground"
+                )}>{votes}</span>
             </Button>
 
             <Dialog open={showEmailDialog} onOpenChange={setShowEmailDialog}>

@@ -1,8 +1,11 @@
 import { prisma } from "@/lib/prisma";
 import { Container } from "@/components/landing-page/Container";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
-import { Ship, MessageSquare, ArrowRight } from "lucide-react";
+import { MessageSquare, ArrowRight } from "lucide-react";
 import Link from "next/link";
+import { Package } from "lucide-react";
+import { Navbar } from "@/components/landing-page/Navbar";
+import { Footer } from "@/components/landing-page/Footer";
 
 export default async function BoardsDirectoryPage() {
     const products = await prisma.product.findMany({
@@ -18,16 +21,7 @@ export default async function BoardsDirectoryPage() {
 
     return (
         <div className="min-h-screen bg-muted/20">
-            <nav className="h-20 border-b border-border bg-background flex items-center">
-                <Container>
-                    <Link href="/" className="flex items-center gap-2 group">
-                        <div className="bg-primary/10 p-2 rounded-lg group-hover:bg-primary/20 transition-colors">
-                            <Ship className="w-6 h-6 text-primary" />
-                        </div>
-                        <span className="text-xl font-bold tracking-tight">ShipNext</span>
-                    </Link>
-                </Container>
-            </nav>
+            <Navbar />
 
             <main className="py-20 animate-in fade-in duration-700">
                 <Container>
@@ -72,8 +66,8 @@ export default async function BoardsDirectoryPage() {
                     )}
                 </Container>
             </main>
+
+            <Footer />
         </div>
     );
 }
-
-import { Package } from "lucide-react";

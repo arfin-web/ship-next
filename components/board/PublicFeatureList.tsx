@@ -1,4 +1,4 @@
-import { MessageSquare, Clock, CheckCircle2 } from "lucide-react";
+import { MessageSquare, Clock, CheckCircle2, ThumbsUp } from "lucide-react";
 import { VoteButton } from "./VoteButton";
 import { formatDistanceToNow } from "date-fns";
 import { cn } from "@/lib/utils";
@@ -78,6 +78,3 @@ export function PublicFeatureList({ features }: PublicFeatureListProps) {
         </div>
     );
 }
-
-// Re-importing ThumbsUp for the IN_PROGRESS icon
-import { ThumbsUp } from "lucide-react";
