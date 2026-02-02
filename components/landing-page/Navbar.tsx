@@ -1,14 +1,11 @@
-import { auth } from "@/lib/auth";
-import { headers } from "next/headers";
 import Link from "next/link";
 import { Ship, Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Container } from "./Container";
+import { getUser } from "@/lib/getUser";
 
 export async function Navbar() {
-    const session = await auth.api.getSession({
-        headers: await headers()
-    })
+    const user = await getUser()
     return (
         <nav className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-md border-b border-border/50">
             <Container>
@@ -29,7 +26,7 @@ export async function Navbar() {
                         <Link href="#features" className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors">Features</Link>
                         <Link href="#how-it-works" className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors">How it works</Link>
                         <Link href="#pricing" className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors">Pricing</Link>
-                        {session?.user ? (
+                        {user ? (
                             <Button size="sm" className="shadow-lg shadow-primary/20" asChild>
                                 <Link href="/dashboard">Dashboard</Link>
                             </Button>

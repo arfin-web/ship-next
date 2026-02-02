@@ -5,8 +5,8 @@ import { usePathname } from "next/navigation";
 import { LayoutDashboard, Package, Settings, LogOut, Ship } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-
 import { Product } from "@/types";
+import { signOut } from "@/app/actions/authActions";
 
 interface DashboardSidebarProps {
     products: Product[];
@@ -56,7 +56,7 @@ export function DashboardSidebar({ products, currentProductId }: DashboardSideba
                 {/* Products List */}
                 <div className="space-y-2">
                     <div className="px-3 flex items-center justify-between">
-                        <h4 className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest text-muted-foreground/40">Recent Products</h4>
+                        <h4 className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/40">Recent Products</h4>
                     </div>
                     <nav className="space-y-1">
                         {products.map((product) => (
@@ -79,11 +79,9 @@ export function DashboardSidebar({ products, currentProductId }: DashboardSideba
             </div>
 
             <div className="p-4 border-t border-border">
-                <Button variant="ghost" className="w-full justify-start text-muted-foreground hover:text-destructive hover:bg-destructive/5" asChild>
-                    <Link href="/api/auth/sign-out">
-                        <LogOut className="w-4 h-4 mr-3" />
-                        Sign out
-                    </Link>
+                <Button onClick={() => signOut()} variant="ghost" className="w-full justify-start text-muted-foreground hover:text-destructive hover:bg-destructive/5 cursor-pointer">
+                    <LogOut className="w-4 h-4 mr-3" />
+                    Sign out
                 </Button>
             </div>
         </aside>

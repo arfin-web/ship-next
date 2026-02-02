@@ -2,6 +2,9 @@ import { getProductBySlug } from "@/app/actions/productActions";
 import { StatsOverview } from "@/components/dashboard/StatsOverview";
 import { FeatureTable } from "@/components/dashboard/FeatureTable";
 import { CreateProductModal } from "@/components/dashboard/CreateProductModal";
+import { MostRequestedFeatures } from "@/components/dashboard/MostRequestedFeatures";
+import { RecentUpdates } from "@/components/dashboard/RecentUpdates";
+import { getBoardInsights } from "@/app/actions/insightActions";
 import { prisma } from "@/lib/prisma";
 import { notFound } from "next/navigation";
 import { FeatureWithCounts } from "@/types";
@@ -40,6 +43,8 @@ export default async function ProductDashboardPage({
         completed: product.features.filter((f) => f.status === "COMPLETED").length,
     };
 
+    const { mostRequested, recentUpdates } = await getBoardInsights(productId);
+
     return (
         <div className="space-y-8 animate-in fade-in duration-500">
             <div className="flex items-center justify-between">
@@ -52,11 +57,20 @@ export default async function ProductDashboardPage({
 
             <StatsOverview {...stats} />
 
-            <div className="space-y-4">
-                <div className="flex items-center justify-between">
-                    <h2 className="text-lg font-bold tracking-tight">Feature Requests</h2>
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <div className="lg:col-span-2 space-y-6">
+                    <div className="space-y-4">
+                        <div className="flex items-center justify-between">
+                            <h2 className="text-lg font-bold tracking-tight">Feature Requests</h2>
+                        </div>
+                        <FeatureTable features={product.features as any} />
+                    </div>
                 </div>
-                <FeatureTable features={product.features} />
+
+                <div className="space-y-6">
+                    <MostRequestedFeatures features={mostRequested as any} />
+                    <RecentUpdates updates={recentUpdates as any} />
+                </div>
             </div>
         </div>
     );

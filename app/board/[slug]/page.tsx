@@ -4,7 +4,6 @@ import { PublicBoardHeader } from "@/components/board/PublicBoardHeader";
 import { PublicFeatureList } from "@/components/board/PublicFeatureList";
 import { Container } from "@/components/landing-page/Container";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { FeatureWithCounts } from "@/types";
 import { Footer } from "@/components/landing-page/Footer";
 
 export default async function PublicBoardPage({
