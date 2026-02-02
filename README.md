@@ -1,36 +1,60 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# ShipNext 🚀
 
-## Getting Started
+ShipNext is a premium, high-performance SaaS platform built for founders to collect, manage, and prioritize product feedback via community-driven feature boards.
 
-First, run the development server:
+## 🏗️ Technical Architecture
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+ShipNext is built on a **Modern Monolith** architecture using **Next.js 16+**. This approach allows for tight coupling between the frontend and backend, ensuring high developer velocity while maintaining Type-Safety across the entire stack.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 🔌 Core Infrastructure
+- **Framework**: Next.js (App Router) with Turbopack for lightning-fast HMR and build times.
+- **Database**: PostgreSQL hosted on **Neon**, leveraging serverless branching and autoscaling.
+- **ORM**: **Prisma** for type-safe database access and automated migrations.
+- **Authentication**: **Better-Auth** with Prisma adapter, providing a secure, session-based auth layer that integrates seamlessly with Next.js middleware.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 🧠 Engineering Decisions: The "Why"
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### 1. Prisma & Neon
+Prisma was chosen for its exceptional Developer Experience (DX). The generated client provides end-to-end type safety, reducing runtime errors. Coupled with Neon's serverless PostgreSQL, we achieve high performance and ease of maintenance without the overhead of traditional DB management.
+> [!NOTE]
+> We use the `@prisma/nextjs-monorepo-workaround` logic (singleton pattern) to prevent connection exhaustion during HMR in development.
 
-## Learn More
+### 2. Better-Auth over traditional alternatives
+Better-Auth offers a more modern, plugin-based approach to authentication. It handles everything from email/password verify to complex session management out of the box, allowing us to focus on core business logic rather than auth boilerplate.
 
-To learn more about Next.js, take a look at the following resources:
+### 3. Server Actions for Data Mutations
+By utilizing `use server` actions, we eliminate the need for complex REST/GraphQL API setup. This reduces the network boundary to a single function call, improving performance and making the codebase easier to reason about.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 💎 Clean Code & Performance Optimization
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### 🧩 Atomic Component Architecture
+Large views like the `DashboardOverview` or `PublicBoard` are broken down into granular, reusable components:
+- **`components/ui`**: Base Shadcn components.
+- **`components/dashboard`**: Founder-specific management tools.
+- **`components/board`**: Public-facing interaction elements.
 
-## Deploy on Vercel
+### 🧊 Centralized Type System
+All core entities are defined in the `types/` directory. This ensures that a `FeatureRequest` or `Product` object has a consistent interface whether it's being used in a server-side query or a client-side prop.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### ⚡ Performance Benchmarks
+- **Zero-Client footprint**: Most pages are Server Components by default, minimizing the JavaScript bundle sent to the browser.
+- **Optimistic UI**: Voting and status updates are designed for responsiveness, leveraging Next.js's data revalidation strategies (`revalidatePath`).
+- **Image Optimization**: Using `next/image` for automatic format conversion and lazy loading.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 🛠️ Development
+
+### Prerequisites
+- Node.js 18+
+- A PostgreSQL database (Neon recommended)
+
+### Setup
+1. Clone the repository.
+2. Install dependencies: `npm install`.
+3. Set up your `.env` file (see `.env.example`).
+4. Generate Prisma client: `npx prisma generate`.
+5. Run migrations: `npx prisma db push`.
+6. Start development: `npm run dev`.
+
+---
+
+**ShipNext** — *Stop guessing, start shipping what matters.*
