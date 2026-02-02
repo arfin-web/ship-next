@@ -1,5 +1,6 @@
 "use server";
 import { auth } from "@/lib/auth"
+import { redirect } from "next/navigation";
 
 export const signUp = async (formData: FormData) => {
     const name = formData.get("name") as string;
@@ -12,6 +13,7 @@ export const signUp = async (formData: FormData) => {
             password,
         }
     })
+    redirect("/dashboard");
 }
 
 export const signIn = async (formData: FormData) => {
@@ -23,8 +25,10 @@ export const signIn = async (formData: FormData) => {
             password,
         }
     })
+    redirect("/dashboard");
 }
 
 export const signOut = async () => {
     await auth.api.signOut();
+    redirect("/");
 }
