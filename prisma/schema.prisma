@@ -1,16 +1,17 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
-  provider = "prisma-client"
+  provider = "prisma-client-js"
   output   = "../app/generated/prisma"
 }
 
 datasource db {
   provider = "postgresql"
+}
+
+enum FeatureStatus {
+  OPEN
+  PLANNED
+  IN_PROGRESS
+  COMPLETED
 }
 
 model User {
@@ -23,6 +24,7 @@ model User {
   updatedAt     DateTime  @updatedAt
   sessions      Session[]
   accounts      Account[]
+  products      Product[]
 
   @@unique([email])
   @@map("user")
@@ -74,4 +76,70 @@ model Verification {
 
   @@index([identifier])
   @@map("verification")
+}
+
+model Product {
+  id          String   @id @default(uuid())
+  name        String
+  slug        String   @unique
+  description String?
+
+  ownerId     String
+  owner       User     @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+
+  features    FeatureRequest[]
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([ownerId])
+  @@map("product")
+}
+
+model FeatureRequest {
+  id          String        @id @default(uuid())
+  title       String
+  description String?
+  status      FeatureStatus @default(OPEN)
+
+  productId   String
+  product     Product       @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  votes       Vote[]
+  updates     StatusUpdate[]
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([productId])
+  @@map("feature_request")
+}
+
+model Vote {
+  id              String   @id @default(uuid())
+  featureId       String
+  voterEmail      String
+
+  feature         FeatureRequest @relation(fields: [featureId], references: [id], onDelete: Cascade)
+
+  createdAt       DateTime @default(now())
+
+  @@unique([featureId, voterEmail])
+  @@index([featureId])
+  @@map("vote")
+}
+
+model StatusUpdate {
+  id          String        @id @default(uuid())
+  featureId   String
+  oldStatus   FeatureStatus
+  newStatus   FeatureStatus
+  message     String?
+
+  feature     FeatureRequest @relation(fields: [featureId], references: [id], onDelete: Cascade)
+
+  createdAt   DateTime @default(now())
+
+  @@index([featureId])
+  @@map("status_update")
 }
