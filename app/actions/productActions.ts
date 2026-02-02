@@ -4,6 +4,7 @@ import { prisma } from "@/lib/prisma";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { revalidatePath } from "next/cache";
+import { Product } from "@/types";
 
 export async function createProduct(formData: FormData) {
     const session = await auth.api.getSession({
@@ -18,7 +19,7 @@ export async function createProduct(formData: FormData) {
     const description = formData.get("description") as string;
     const slug = name.toLowerCase().replace(/ /g, "-").replace(/[^\w-]+/g, "");
 
-    const product = await prisma.product.create({
+    const product: Product = await prisma.product.create({
         data: {
             name,
             description,

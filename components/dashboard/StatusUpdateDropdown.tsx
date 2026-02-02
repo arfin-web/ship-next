@@ -12,7 +12,9 @@ import {
 import { updateFeatureStatus } from "@/app/actions/featureActions";
 import { cn } from "@/lib/utils";
 
-const statuses = [
+import { FeatureStatus } from "@/types";
+
+const statuses: { value: FeatureStatus; label: string; color: string }[] = [
     { value: "OPEN", label: "Open", color: "bg-slate-500/10 text-slate-500 border-slate-500/20" },
     { value: "PLANNED", label: "Planned", color: "bg-orange-500/10 text-orange-500 border-orange-500/20" },
     { value: "IN_PROGRESS", label: "In Progress", color: "bg-purple-500/10 text-purple-500 border-purple-500/20" },
@@ -21,14 +23,14 @@ const statuses = [
 
 interface StatusUpdateDropdownProps {
     featureId: string;
-    currentStatus: string;
+    currentStatus: FeatureStatus;
 }
 
 export function StatusUpdateDropdown({ featureId, currentStatus }: StatusUpdateDropdownProps) {
     const [isUpdating, setIsUpdating] = useState(false);
     const activeStatus = statuses.find((s) => s.value === currentStatus) || statuses[0];
 
-    async function handleStatusChange(newStatus: string) {
+    async function handleStatusChange(newStatus: FeatureStatus) {
         if (newStatus === currentStatus) return;
 
         setIsUpdating(true);

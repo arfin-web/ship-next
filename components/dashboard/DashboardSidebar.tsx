@@ -2,15 +2,11 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { LayoutDashboard, Package, MessageSquare, Settings, LogOut, Plus, Ship } from "lucide-react";
+import { LayoutDashboard, Package, Settings, LogOut, Ship } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 
-interface Product {
-    id: string;
-    name: string;
-    slug: string;
-}
+import { Product } from "@/types";
 
 interface DashboardSidebarProps {
     products: Product[];

@@ -2,19 +2,10 @@ import { ThumbsUp, MessageSquare, Clock } from "lucide-react";
 import { StatusUpdateDropdown } from "./StatusUpdateDropdown";
 import { formatDistanceToNow } from "date-fns";
 
-interface Feature {
-    id: string;
-    title: string;
-    description: string | null;
-    status: string;
-    createdAt: Date;
-    _count: {
-        votes: number;
-    };
-}
+import { FeatureWithCounts } from "@/types";
 
 interface FeatureTableProps {
-    features: Feature[];
+    features: FeatureWithCounts[];
 }
 
 export function FeatureTable({ features }: FeatureTableProps) {

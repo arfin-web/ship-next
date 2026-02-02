@@ -4,6 +4,7 @@ import { prisma } from "@/lib/prisma";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { revalidatePath } from "next/cache";
+import { FeatureStatus } from "@/types";
 
 export async function createFeatureRequest(productId: string, formData: FormData) {
     const title = formData.get("title") as string;
@@ -21,7 +22,7 @@ export async function createFeatureRequest(productId: string, formData: FormData
     return feature;
 }
 
-export async function updateFeatureStatus(featureId: string, newStatus: any, message?: string) {
+export async function updateFeatureStatus(featureId: string, newStatus: FeatureStatus, message?: string) {
     const session = await auth.api.getSession({
         headers: await headers(),
     });

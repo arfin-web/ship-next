@@ -4,6 +4,7 @@ import { FeatureTable } from "@/components/dashboard/FeatureTable";
 import { CreateProductModal } from "@/components/dashboard/CreateProductModal";
 import { prisma } from "@/lib/prisma";
 import { notFound } from "next/navigation";
+import { FeatureWithCounts } from "@/types";
 
 export default async function ProductDashboardPage({
     params,

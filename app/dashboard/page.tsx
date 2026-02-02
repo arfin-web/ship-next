@@ -2,6 +2,7 @@ import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { prisma } from "@/lib/prisma";
 import { DashboardOverview } from "@/components/dashboard/DashboardOverview";
+import { ProductWithCounts } from "@/types";
 
 export default async function DashboardPage() {
     const session = await auth.api.getSession({
