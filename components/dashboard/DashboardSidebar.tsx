@@ -2,11 +2,10 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { LayoutDashboard, Package, Settings, LogOut, Ship } from "lucide-react";
+import { LayoutDashboard, Package, Settings, Ship } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
 import { Product } from "@/types";
-import { signOut } from "@/app/actions/authActions";
+import { SignOutButton } from "./SignOutButton";
 
 interface DashboardSidebarProps {
     products: Product[];
@@ -78,12 +77,7 @@ export function DashboardSidebar({ products, currentProductId }: DashboardSideba
                 </div>
             </div>
 
-            <div className="p-4 border-t border-border">
-                <Button onClick={() => signOut()} variant="ghost" className="w-full justify-start text-muted-foreground hover:text-destructive hover:bg-destructive/5 cursor-pointer">
-                    <LogOut className="w-4 h-4 mr-3" />
-                    Sign out
-                </Button>
-            </div>
+            <SignOutButton />
         </aside>
     );
 }

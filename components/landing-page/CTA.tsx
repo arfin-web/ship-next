@@ -24,7 +24,7 @@ export function CTA() {
                             </Link>
                         </Button>
                         <Button size="lg" variant="outline" className="h-12 px-8 text-base font-bold bg-transparent text-white border-white/30 hover:bg-white/10" asChild>
-                            <Link href="/demo">View Live Demo</Link>
+                            <Link href="/coming-soon">View Live Demo</Link>
                         </Button>
                     </div>
                     <p className="mt-8 text-sm text-primary-foreground/60 italic font-medium">

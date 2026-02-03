@@ -1,6 +1,6 @@
 import { signIn } from "@/app/actions/authActions";
 import { AuthCard } from "@/components/auth/AuthCard";
-import { Button } from "@/components/ui/button";
+import { SubmitButton } from "@/components/landing-page/SubmitButton";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Link from "next/link";
@@ -39,9 +39,7 @@ export default function LoginPage() {
                         className="h-11"
                     />
                 </div>
-                <Button type="submit" className="w-full h-11 text-base bg-primary text-primary-foreground hover:bg-primary/90 shadow-lg shadow-primary/20">
-                    Sign in
-                </Button>
+                <SubmitButton />
             </form>
 
             <div className="mt-6 pt-6 border-t border-border">
