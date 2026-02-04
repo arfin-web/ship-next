@@ -31,9 +31,6 @@ export function HowItWorks() {
                 </div>
 
                 <div className="relative">
-                    {/* Connector Line (Desktop) */}
-                    <div className="hidden md:block absolute top-1/2 left-0 w-full h-0.5 bg-linear-to-r from-transparent via-border to-transparent -translate-y-1/2" />
-
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-12 relative">
                         {steps.map((step, index) => (
                             <div key={index} className="flex flex-col items-center text-center">
