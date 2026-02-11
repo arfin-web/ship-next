@@ -2,6 +2,14 @@
 
 ShipNext is a premium, high-performance SaaS platform built for founders to collect, manage, and prioritize product feedback via community-driven feature boards.
 
+## ✨ Key Features
+- **🚀 Founder Dashboard**: A powerful, centralized hub to manage multiple products and streamline your feedback workflow.
+- **🗳️ Community Voting**: Let your users voice their needs with a high-performance, real-time voting system.
+- **🗺️ Visual Roadmap**: Transparently communicate progress with automated roadmaps (Planned, In Progress, Shipped).
+- **🔒 Public/Private Boards**: Full control over board visibility for internal refinement or public community engagement.
+- **📈 Data-Driven Insights**: Actionable analytics on feature requests to help you prioritize what truly matters.
+- **🛡️ Secure Auth**: Modern, session-based authentication layer ensuring a safe environment for both founders and users.
+
 ## 🏗️ Technical Architecture
 
 ShipNext is built on a **Modern Monolith** architecture using **Next.js 16+**. This approach allows for tight coupling between the frontend and backend, ensuring high developer velocity while maintaining Type-Safety across the entire stack.
